@@ -44,7 +44,13 @@ public class ArticleListAdapter extends BaseAdapter {
 			LayoutInflater li = LayoutInflater.from(ctx);
 			convertView = li.inflate(R.layout.articleitem, null);
 		}
-		((TextView) convertView.findViewById(R.id.titleTextView)).setText(StringUtil.htmlDecode(getItem(position).getTitle()));
+		Article article = getItem(position);
+		((TextView) convertView.findViewById(R.id.titleTextView)).setText(StringUtil.htmlDecode(article.getTitle()));
+		if (!article.isFinish()) {
+			((TextView) convertView.findViewById(R.id.titleTextView)).setTextColor(ctx.getResources().getColor(android.R.color.darker_gray));
+		} else {
+			((TextView) convertView.findViewById(R.id.titleTextView)).setTextColor(ctx.getResources().getColor(android.R.color.black));
+		}
 		return convertView;
 	}
 

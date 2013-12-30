@@ -77,8 +77,6 @@ public class NetUtil {
 
 	public static String getUrlResponse(String url) throws IOException {
 		HttpURLConnection conn = (HttpURLConnection) (new URL(url).openConnection());
-		conn.setDoOutput(true);
-		conn.setDoInput(true);
 		// POST必须大写
 		conn.setRequestMethod("GET");
 		conn.setUseCaches(false);

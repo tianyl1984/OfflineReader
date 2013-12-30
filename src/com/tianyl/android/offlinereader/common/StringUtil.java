@@ -1,5 +1,7 @@
 package com.tianyl.android.offlinereader.common;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 public class StringUtil {
 
 	public static boolean isBlank(String str) {
@@ -30,6 +32,7 @@ public class StringUtil {
 		if (isBlank(str)) {
 			return str;
 		}
-		return str.replaceAll("&nbsp;", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+		return StringEscapeUtils.unescapeHtml4(str);
+		// return str.replaceAll("&nbsp;", " ").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 	}
 }

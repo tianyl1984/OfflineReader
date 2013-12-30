@@ -4,11 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -32,9 +27,9 @@ import com.tianyl.android.offlinereader.common.NetUtil;
 import com.tianyl.android.offlinereader.common.ProgressThreadWrap;
 import com.tianyl.android.offlinereader.common.RunnableWrap;
 import com.tianyl.android.offlinereader.common.StringUtil;
-import com.tianyl.android.offlinereader.common.UUID;
 import com.tianyl.android.offlinereader.dao.ArticleDBUtil;
 import com.tianyl.android.offlinereader.model.Article;
+import com.tianyl.android.offlinereader.sync.SyncService;
 
 public class MainActivity extends Activity {
 
@@ -84,7 +79,7 @@ public class MainActivity extends Activity {
 		if (b != null) {
 			String url = b.getString("newUrl");
 			if (StringUtil.isNotBlank(url)) {
-				addURL(url);
+				addURL(url, true);
 				// this.finish();
 			}
 		}
@@ -133,6 +128,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					String url = urlText.getText().toString().trim();
+					// url = "http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5ODAzMDMyMQ==&appmsgid=100014098&itemidx=1&sign=70c11536952cd9dfbe1c8abee6a34b3c&uin=MTUwNjE5&key=234b3ec6051a4a54145598a43f997fa544cdfcbd55bc45383ad632155ede9cbadfea7cef04ad0491cac84030e11e7d4f&devicetype=android-17&version=25000338&lang=zh_CN";
 					if (url.isEmpty()) {
 						return;
 					}
@@ -149,68 +145,37 @@ public class MainActivity extends Activity {
 			});
 			ad.show();
 			break;
+		case R.id.action_sync:
+			if (!NetUtil.checkWifi(this)) {
+				break;
+			}
+			if (articleDBUtil.selectUnEnd().size() > 0) {
+				Intent service = new Intent(this, SyncService.class);
+				startService(service);
+			} else {
+				Toast.makeText(this, "已全部下载", Toast.LENGTH_SHORT).show();
+			}
+			break;
 		default:
 			break;
 		}
 		return true;
 	}
 
-	private void addURL(final String url) {
+	private void addURL(final String url, final boolean isFinish) {
 		new ProgressThreadWrap(this, new RunnableWrap() {
 			@Override
 			public void run(ProgressDialog progressDialog) {
 				try {
-					String html = NetUtil.getUrlResponse(url);
-					String uuid = UUID.getUUID();
-					String fileName = FileUtil.getBathPath() + uuid + "/" + uuid + ".html";
-					Document document = Jsoup.parse(html);
-
 					Article article = new Article();
 					article.setStatus(Article.STATUS_START);
 					article.setUrl(url);
-					article.setPathId(uuid);
-					String title = "未知";
-					Elements eles = document.getElementsByTag("title");
-					if (!eles.isEmpty()) {
-						Element ele = eles.iterator().next();
-						title = ele.html();
-					}
-					article.setTitle(title);
+					article.setTitle("尚未下载数据");
 					articleDBUtil.save(article);
-
-					eles = document.getElementsByTag("img");
-					for (Element ele : eles) {
-						if (ele.hasAttr("src")) {
-							String picUrl = ele.attr("src");
-							picUrl = NetUtil.getRealURL(url, picUrl);
-							String picId = UUID.getUUID();
-							NetUtil.downloadFileSimple(picUrl, new File(FileUtil.getBathPath() + uuid + "/" + picId));
-							ele.attr("src", picId);
-						}
-					}
-					eles = document.getElementsByTag("link");
-					for (Element ele : eles) {
-						if (ele.hasAttr("href")) {
-							String href = ele.attr("href");
-							href = NetUtil.getRealURL(url, href);
-							String newId = UUID.getUUID();
-							NetUtil.downloadFileSimple(href, new File(FileUtil.getBathPath() + uuid + "/" + newId + ".css"));
-							ele.attr("href", newId + ".css");
-						}
-					}
-					eles = document.getElementsByTag("script");
-					for (Element ele : eles) {
-						if (ele.hasAttr("src")) {
-							String src = ele.attr("src");
-							src = NetUtil.getRealURL(url, src);
-							String newId = UUID.getUUID();
-							NetUtil.downloadFileSimple(src, new File(FileUtil.getBathPath() + uuid + "/" + newId + ".js"));
-							ele.attr("src", newId + ".js");
-						}
-					}
-					FileUtil.saveStringToFile(document.html(), new File(fileName));
-					articleDBUtil.updateStatusToEnd(article.getId());
 					Toast.makeText(MainActivity.this, "添加成功", Toast.LENGTH_LONG).show();
+					if (isFinish) {
+						MainActivity.this.finish();
+					}
 				} catch (Exception e) {
 					Toast.makeText(MainActivity.this, "出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
 					e.printStackTrace();
@@ -232,7 +197,7 @@ public class MainActivity extends Activity {
 		public boolean handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_ADD_URL:
-				addURL(msg.obj.toString());
+				addURL(msg.obj.toString(), false);
 				break;
 			case MSG_FLUSHDATA:
 				flushData();

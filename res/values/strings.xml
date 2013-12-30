@@ -3,5 +3,7 @@
 
     <string name="app_name">离线阅读器</string>
     <string name="action_add">添加</string>
+    <string name="action_sync">同步</string>
+    <string name="no_startSync">开始同步</string>
 
 </resources>

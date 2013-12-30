@@ -14,7 +14,8 @@
   	android:layout_marginLeft="2sp"
   	android:textSize="18sp"
   	android:text=""
-  	android:textColor="#000000"
+  	android:textColor="@android:color/darker_gray"
   	android:lines="1"
+  	android:singleLine="true"
   />
 </LinearLayout>
