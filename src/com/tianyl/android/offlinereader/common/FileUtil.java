@@ -17,6 +17,27 @@ public class FileUtil {
 		return path;
 	}
 
+	public static final void appendStringToFile(String str, File file) {
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		FileWriter fw = null;
+		try {
+			fw = new FileWriter(file, true);
+			fw.append(str + "\r\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fw != null) {
+				try {
+					fw.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	public static final void saveStringToFile(String str, File file) {
 		if (!file.getParentFile().exists()) {
 			file.getParentFile().mkdirs();
