@@ -7,9 +7,9 @@
   >
 <EditText
 	android:id="@+id/urlText"
+	android:inputType="textUri"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text=""
-    android:hint="URL"
 />
 </LinearLayout>

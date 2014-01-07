@@ -7,8 +7,11 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -85,6 +88,27 @@ public class MainActivity extends Activity {
 		}
 
 		flushData();
+	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			flushData();
+		}
+	};
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constant.BROADCAST_ACTION_SYNC_FINISH);
+		registerReceiver(receiver, filter);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		unregisterReceiver(receiver);
 	}
 
 	private void delete(long optId) {

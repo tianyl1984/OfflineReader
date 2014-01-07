@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.IBinder;
 
+import com.tianyl.android.offlinereader.Constant;
 import com.tianyl.android.offlinereader.common.DateUtil;
 import com.tianyl.android.offlinereader.common.FileUtil;
 import com.tianyl.android.offlinereader.common.NetUtil;
@@ -118,6 +119,10 @@ public class SyncService extends Service {
 					}
 				}
 				syncNotification.cancel();
+				// 发送广播
+				Intent intent = new Intent();
+				intent.setAction(Constant.BROADCAST_ACTION_SYNC_FINISH);
+				sendBroadcast(intent);
 			}
 		}).start();
 
