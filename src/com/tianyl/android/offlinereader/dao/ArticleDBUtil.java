@@ -34,7 +34,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 	}
 
 	public List<Article> selectAll() {
-		Cursor cursor = this.getWritableDatabase().query("tab_article", null, null, null, null, null, "id");
+		Cursor cursor = this.getReadableDatabase().query("tab_article", null, null, null, null, null, "id");
 		List<Article> articles = new ArrayList<Article>();
 		while (cursor.moveToNext()) {
 			Article article = new Article();
@@ -45,11 +45,12 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 			article.setPathId(cursor.getString(4));
 			articles.add(article);
 		}
+		cursor.close();
 		return articles;
 	}
 
 	public List<Article> selectUnEnd() {
-		Cursor cursor = this.getWritableDatabase().query("tab_article", null, "status != ?", new String[] { Article.STATUS_END }, null, null, "id");
+		Cursor cursor = this.getReadableDatabase().query("tab_article", null, "status != ?", new String[] { Article.STATUS_END }, null, null, "id");
 		List<Article> articles = new ArrayList<Article>();
 		while (cursor.moveToNext()) {
 			Article article = new Article();
@@ -60,6 +61,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 			article.setPathId(cursor.getString(4));
 			articles.add(article);
 		}
+		cursor.close();
 		return articles;
 	}
 
@@ -92,7 +94,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 	}
 
 	public Article get(long id) {
-		Cursor cursor = this.getWritableDatabase().query("tab_article", null, "id = ?", new String[] { id + "" }, null, null, null);
+		Cursor cursor = this.getReadableDatabase().query("tab_article", null, "id = ?", new String[] { id + "" }, null, null, null);
 		Article article = new Article();
 		while (cursor.moveToNext()) {
 			article.setId(cursor.getInt(0));
@@ -101,6 +103,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 			article.setStatus(cursor.getString(3));
 			article.setPathId(cursor.getString(4));
 		}
+		cursor.close();
 		return article;
 	}
 

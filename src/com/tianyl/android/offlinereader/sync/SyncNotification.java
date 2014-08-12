@@ -2,7 +2,9 @@ package com.tianyl.android.offlinereader.sync;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.tianyl.android.offlinereader.R;
@@ -21,6 +23,8 @@ public class SyncNotification {
 		}
 		id = 10;
 		notification = new Notification();
+		PendingIntent intent = PendingIntent.getActivity(service, 0, new Intent(), PendingIntent.FLAG_CANCEL_CURRENT);
+		notification.contentIntent = intent;
 		notification.icon = R.drawable.download_icon;
 		notification.tickerText = service.getResources().getString(R.string.no_startSync);
 		notification.flags = Notification.FLAG_ONGOING_EVENT;

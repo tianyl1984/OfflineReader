@@ -1,6 +1,7 @@
 package com.tianyl.android.offlinereader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -180,6 +182,24 @@ public class MainActivity extends Activity {
 				Toast.makeText(this, "已全部下载", Toast.LENGTH_SHORT).show();
 			}
 			break;
+		case R.id.action_test:
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					Looper.prepare();
+					String url = "http://mp.weixin.qq.com/s?__biz=MjM5MjAzODU2MA==&mid=201206792&idx=1&sn=bb190b8df9d7476a96c62d27a499b314";
+					try {
+						String html = NetUtil.getUrlResponse(url);
+						Toast.makeText(MainActivity.this, html, Toast.LENGTH_LONG).show();
+					} catch (IOException e) {
+						e.printStackTrace();
+						Toast.makeText(MainActivity.this, "出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
+					}
+					Looper.loop();
+				}
+			}).start();
+			break;
 		default:
 			break;
 		}
@@ -233,4 +253,9 @@ public class MainActivity extends Activity {
 			return false;
 		}
 	});
+
+	protected void onDestroy() {
+		super.onDestroy();
+		articleDBUtil.close();
+	};
 }

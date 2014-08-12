@@ -54,9 +54,6 @@ public class NetUtil {
 	public static void downloadFileSimple(String url, File file) throws IOException {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setUseCaches(false);
-		if (StringUtil.isNotBlank(sessionId)) {// 设置cookie
-			con.setRequestProperty("Cookie", sessionId);
-		}
 		if (con.getResponseCode() != HttpURLConnection.HTTP_OK && con.getResponseCode() != HttpURLConnection.HTTP_PARTIAL) {
 			throw new IOException();
 		}
@@ -81,14 +78,11 @@ public class NetUtil {
 		conn.setRequestMethod("GET");
 		conn.setUseCaches(false);
 		// 请求头
-		// conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0");
+		conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0");
 		// 仅对当前请求自动重定向
 		conn.setInstanceFollowRedirects(false);
 		// header 设置编码
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		if (StringUtil.isNotBlank(sessionId)) {// 设置cookie
-			// conn.setRequestProperty("Cookie", sessionId);
-		}
 		conn.setConnectTimeout(10000);
 		// 连接
 		conn.connect();

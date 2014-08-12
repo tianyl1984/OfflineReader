@@ -1,6 +1,7 @@
 package com.tianyl.android.offlinereader.sync;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -87,13 +88,18 @@ public class SyncService extends Service {
 								}
 								picUrl = NetUtil.getRealURL(url, picUrl);
 								String picId = UUID.getUUID();
-								NetUtil.downloadFileSimple(picUrl, new File(FileUtil.getBathPath() + uuid + "/" + picId));
-								ele.attr("src", picId);
+								try {
+									NetUtil.downloadFileSimple(picUrl, new File(FileUtil.getBathPath() + uuid + "/" + picId));
+									ele.attr("src", picId);
+								} catch (IOException e1) {
+									addLog("error download pic:" + picUrl);
+									e1.printStackTrace();
+								}
 							}
 						}
 						eles = document.getElementsByTag("link");
 						for (Element ele : eles) {
-							if (ele.hasAttr("href")) {
+							if (ele.hasAttr("href") && "stylesheet".equals(ele.attr("rel"))) {
 								String href = ele.attr("href");
 								href = NetUtil.getRealURL(url, href);
 								String newId = UUID.getUUID();
