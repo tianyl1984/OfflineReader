@@ -35,6 +35,7 @@ import com.tianyl.android.offlinereader.common.StringUtil;
 import com.tianyl.android.offlinereader.dao.ArticleDBUtil;
 import com.tianyl.android.offlinereader.model.Article;
 import com.tianyl.android.offlinereader.sync.SyncService;
+import com.tianyl.android.offlinereader.wx.WeiXinActivity;
 
 public class MainActivity extends Activity {
 
@@ -181,6 +182,11 @@ public class MainActivity extends Activity {
 			} else {
 				Toast.makeText(this, "已全部下载", Toast.LENGTH_SHORT).show();
 			}
+			break;
+		case R.id.action_weixin:
+			Intent intent = new Intent();
+			intent.setClass(this, WeiXinActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.action_test:
 			new Thread(new Runnable() {

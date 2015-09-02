@@ -19,7 +19,9 @@ public class ArticleActivity extends Activity {
 		Bundle b = getIntent().getExtras();
 		long id = b.getLong("articleId");
 		Article article = new ArticleDBUtil(this).get(id);
+
 		WebView articleWebView = (WebView) findViewById(R.id.articleWebView);
+		// articleWebView.loadUrl("http://192.168.90.52:8093/diagnosis/mobile/leader/login.html");
 		articleWebView.loadUrl("file://" + FileUtil.getBathPath() + article.getPathId() + "/" + article.getPathId() + ".html");
 	}
 
