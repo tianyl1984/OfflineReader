@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.os.IBinder;
 
 import com.tianyl.android.offlinereader.Constant;
-import com.tianyl.android.offlinereader.common.DateUtil;
 import com.tianyl.android.offlinereader.common.FileUtil;
 import com.tianyl.android.offlinereader.common.NetUtil;
 import com.tianyl.android.offlinereader.common.StringUtil;
@@ -32,7 +31,7 @@ public class SyncService extends Service {
 	private static final File logFile = new File(FileUtil.getBathPath() + "/log.txt");
 
 	private static void addLog(String str) {
-		FileUtil.appendStringToFile(DateUtil.getCurrentDate() + "  " + str, logFile);
+		// FileUtil.appendStringToFile(DateUtil.getCurrentDate() + "  " + str, logFile);
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class SyncService extends Service {
 								ele.attr("src", newId + ".js");
 							}
 						}
-						FileUtil.saveStringToFile(document.html(), new File(fileName));
+						FileUtil.saveStringToFile(document.html() + "<script type=\"text/javascript\" src=\"file:///android_asset/injection.js\"></script>", new File(fileName));
 						articleDBUtil.updateStatusToEnd(article.getId());
 						syncNotification.addOneFinish();
 					} catch (Exception e) {

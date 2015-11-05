@@ -1,7 +1,6 @@
 package com.tianyl.android.offlinereader;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,14 +193,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void run() {
 					Looper.prepare();
-					String url = "http://mp.weixin.qq.com/s?__biz=MjM5MjAzODU2MA==&mid=201206792&idx=1&sn=bb190b8df9d7476a96c62d27a499b314";
-					try {
-						String html = NetUtil.getUrlResponse(url);
-						Toast.makeText(MainActivity.this, html, Toast.LENGTH_LONG).show();
-					} catch (IOException e) {
-						e.printStackTrace();
-						Toast.makeText(MainActivity.this, "出错：" + e.getMessage(), Toast.LENGTH_LONG).show();
-					}
+
 					Looper.loop();
 				}
 			}).start();

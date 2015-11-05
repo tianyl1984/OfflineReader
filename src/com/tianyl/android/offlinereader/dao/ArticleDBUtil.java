@@ -93,8 +93,15 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 		db.update("tab_article", cv, "id = ? ", new String[] { id + "" });
 	}
 
+	public void updateLastTop(long id, int lastTop) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues cv = new ContentValues();
+		cv.put("lastTop", lastTop);
+		db.update("tab_article", cv, "id = ? ", new String[] { id + "" });
+	}
+
 	public Article get(long id) {
-		Cursor cursor = this.getReadableDatabase().query("tab_article", null, "id = ?", new String[] { id + "" }, null, null, null);
+		Cursor cursor = this.getReadableDatabase().query("tab_article", new String[] { "id", "title", "url", "status", "pathId", "lastTop" }, "id = ?", new String[] { id + "" }, null, null, null);
 		Article article = new Article();
 		while (cursor.moveToNext()) {
 			article.setId(cursor.getInt(0));
@@ -102,6 +109,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 			article.setUrl(cursor.getString(2));
 			article.setStatus(cursor.getString(3));
 			article.setPathId(cursor.getString(4));
+			article.setLastTop(cursor.getInt(5));
 		}
 		cursor.close();
 		return article;

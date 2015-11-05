@@ -20,6 +20,8 @@ public class Article {
 
 	private String pathId;
 
+	private int lastTop;
+
 	public static final String STATUS_START = "0";
 
 	public static final String STATUS_END = "1";
@@ -66,6 +68,14 @@ public class Article {
 
 	public void setPathId(String pathId) {
 		this.pathId = pathId;
+	}
+
+	public int getLastTop() {
+		return lastTop;
+	}
+
+	public void setLastTop(int lastTop) {
+		this.lastTop = lastTop;
 	}
 
 }
