@@ -22,7 +22,7 @@ public class ArticleDBUtil extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String sql = "create table tab_article(id integer primary key autoincrement,title text,url text,status text,pathId text);";
+		String sql = "create table tab_article(id integer primary key autoincrement,title text,url text,status text,pathId text,lastTop);";
 		db.execSQL(sql);
 	}
 
