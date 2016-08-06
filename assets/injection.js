@@ -20,8 +20,12 @@ function log(str){
 
 	window.onload = function(){
 		var lastTop = getUrlParams(window.location.href).lastTop;
+		//log("onload:" + lastTop);
 		window.scrollTo(0,parseInt(lastTop));
-		//log("onload");
+	}
+	
+	window.onerror = function(){
+		log("error");
 	}
 	
 })()

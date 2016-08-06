@@ -26,7 +26,7 @@ public class ArticleActivity extends Activity {
 		articleWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 		articleWebView.getSettings().setAllowFileAccess(true);
 		articleWebView.addJavascriptInterface(new JavaScriptInterface(articleWebView, new Handler(), this), "android");
-		articleWebView.loadUrl("file://" + FileUtil.getBathPath() + article.getPathId() + "/" + article.getPathId() + ".html?id=" + id + "&lastTop=" + article.getLastTop());
+		articleWebView.loadUrl("file://" + FileUtil.getBathPath() + article.getPathId() + "/" + article.getPathId() + ".html?safe=0&id=" + id + "&lastTop=" + article.getLastTop());
 		// articleWebView.loadUrl("file:///android_asset/test.html?id=124&lastTop=12345");
 	}
 

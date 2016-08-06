@@ -1,6 +1,7 @@
 package com.tianyl.android.offlinereader;
 
 import android.os.Handler;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ public class JavaScriptInterface {
 		this.articleActivity = articleActivity;
 	}
 
+	@JavascriptInterface
 	public void logScrollTop(final long id, final int top) {
 		handler.post(new Runnable() {
 			@Override
@@ -29,6 +31,7 @@ public class JavaScriptInterface {
 		});
 	}
 
+	@JavascriptInterface
 	public void toast(final String str) {
 		handler.post(new Runnable() {
 			@Override
