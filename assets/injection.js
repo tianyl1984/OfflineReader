@@ -39,3 +39,6 @@ function getUrlParams(url) {
 
   return params;
 }
+
+//覆盖原方法
+function occupyImg(){return}

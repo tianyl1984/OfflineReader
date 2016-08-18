@@ -15,6 +15,7 @@ import android.content.res.Configuration;
 import android.os.IBinder;
 
 import com.tianyl.android.offlinereader.Constant;
+import com.tianyl.android.offlinereader.common.DateUtil;
 import com.tianyl.android.offlinereader.common.FileUtil;
 import com.tianyl.android.offlinereader.common.NetUtil;
 import com.tianyl.android.offlinereader.common.StringUtil;
@@ -31,26 +32,23 @@ public class SyncService extends Service {
 	private static final File logFile = new File(FileUtil.getBathPath() + "/log.txt");
 
 	private static void addLog(String str) {
-		// FileUtil.appendStringToFile(DateUtil.getCurrentDate() + "  " + str, logFile);
+		FileUtil.appendStringToFile(DateUtil.getCurrentDate() + "  " + str, logFile);
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		addLog("onBind");
 		return null;
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		addLog("onCreate");
 		articleDBUtil = new ArticleDBUtil(this);
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		super.onStart(intent, startId);
-		addLog("onStart");
+		// super.onStart(intent, startId);
 		syncNotification = new SyncNotification(this);
 
 		new Thread(new Runnable() {
@@ -86,6 +84,7 @@ public class SyncService extends Service {
 									picUrl = ele.attr("data-src");
 								}
 								picUrl = NetUtil.getRealURL(url, picUrl);
+								// addLog("real picUrl:" + picUrl);
 								String picId = UUID.getUUID();
 								try {
 									NetUtil.downloadFileSimple(picUrl, new File(FileUtil.getBathPath() + uuid + "/" + picId));
@@ -142,32 +141,27 @@ public class SyncService extends Service {
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
-		addLog("onLowMemory");
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		addLog("onConfigurationChanged");
 	}
 
 	@Override
 	public void onRebind(Intent intent) {
 		super.onRebind(intent);
-		addLog("onRebind");
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		int result = super.onStartCommand(intent, flags, startId);
-		addLog("onStartCommand");
 		return result;
 	}
 
 	@Override
 	public boolean onUnbind(Intent intent) {
 		boolean result = super.onUnbind(intent);
-		addLog("onUnbind");
 		return result;
 	}
 }

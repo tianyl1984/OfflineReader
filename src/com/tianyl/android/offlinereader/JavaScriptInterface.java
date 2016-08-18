@@ -37,7 +37,7 @@ public class JavaScriptInterface {
 			@Override
 			public void run() {
 				// Looper.prepare();
-				Toast.makeText(articleActivity, "str:" + str, Toast.LENGTH_SHORT).show();
+				Toast.makeText(articleActivity, str, Toast.LENGTH_SHORT).show();
 				// Looper.loop();
 			}
 		});
