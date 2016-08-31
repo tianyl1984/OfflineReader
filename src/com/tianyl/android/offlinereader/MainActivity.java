@@ -73,13 +73,16 @@ public class MainActivity extends Activity {
 								MainActivity.this);
 						builder.setTitle("操作");
 						final long optId = id;
-						builder.setItems(new String[] { "删除" },
+						builder.setItems(new String[] { "删除", "重新下载" },
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog,
 											int which) {
 										if (which == 0) {
 											delete(optId);
+										}
+										if (which == 1) {
+											redownload(optId);
 										}
 									}
 
@@ -136,13 +139,27 @@ public class MainActivity extends Activity {
 	private void delete(long optId) {
 		Article article = articleDBUtil.get(optId);
 		articleDBUtil.delete(optId);
-		File file = new File(FileUtil.getBathPath() + article.getPathId());
+		deleteFiles(article.getPathId());
+		flushData();
+	}
+
+	private void deleteFiles(String pathId) {
+		File file = new File(FileUtil.getBathPath() + pathId);
 		if (file.exists()) {
 			for (File f : file.listFiles()) {
 				f.delete();
 			}
 			file.delete();
 		}
+	}
+
+	private void redownload(long optId) {
+		Article article = articleDBUtil.get(optId);
+		deleteFiles(article.getPathId());
+		article.setStatus(Article.STATUS_START);
+		article.setPathId(null);
+		articleDBUtil.update(article);
+		sync();
 		flushData();
 	}
 
@@ -198,15 +215,7 @@ public class MainActivity extends Activity {
 			ad.show();
 			break;
 		case R.id.action_sync:
-			if (!NetUtil.checkWifi(this)) {
-				break;
-			}
-			if (articleDBUtil.selectUnEnd().size() > 0) {
-				Intent service = new Intent(this, SyncService.class);
-				startService(service);
-			} else {
-				Toast.makeText(this, "已全部下载", Toast.LENGTH_SHORT).show();
-			}
+			sync();
 			break;
 		case R.id.action_weixin:
 			Intent intent = new Intent();
@@ -228,6 +237,18 @@ public class MainActivity extends Activity {
 			break;
 		}
 		return true;
+	}
+
+	private void sync() {
+		if (!NetUtil.checkWifi(this)) {
+			return;
+		}
+		if (articleDBUtil.selectUnEnd().size() > 0) {
+			Intent service = new Intent(this, SyncService.class);
+			startService(service);
+		} else {
+			Toast.makeText(this, "已全部下载", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void addURL(final String url, final boolean isFinish) {

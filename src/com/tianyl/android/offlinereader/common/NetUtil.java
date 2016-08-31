@@ -78,7 +78,7 @@ public class NetUtil {
 		conn.setRequestMethod("GET");
 		conn.setUseCaches(false);
 		// 请求头
-		conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1; rv:12.0) Gecko/20100101 Firefox/12.0");
+		conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36");
 		// 仅对当前请求自动重定向
 		conn.setInstanceFollowRedirects(false);
 		// header 设置编码
